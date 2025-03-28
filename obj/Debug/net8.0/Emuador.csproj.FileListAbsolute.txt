@@ -1,0 +1,14 @@
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\bin\Debug\net8.0\Emuador.exe
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\bin\Debug\net8.0\Emuador.deps.json
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\bin\Debug\net8.0\Emuador.runtimeconfig.json
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\bin\Debug\net8.0\Emuador.dll
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\bin\Debug\net8.0\Emuador.pdb
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.AssemblyInfoInputs.cache
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.AssemblyInfo.cs
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.csproj.CoreCompileInputs.cache
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.dll
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\refint\Emuador.dll
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.pdb
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.genruntimeconfig.cache
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\ref\Emuador.dll
