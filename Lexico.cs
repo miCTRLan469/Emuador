@@ -21,6 +21,7 @@ namespace Emulador
         const int F = -1;
         const int E = -2;
         public static int columna = 1;
+        protected int charCount;
         readonly int[,] TRAND = {
                 {  0,  1,  2, 33,  1, 12, 14,  8,  9, 10, 11, 23, 16, 16, 18, 20, 21, 26, 25, 27, 29, 32, 34,  0,  F, 33  },
                 {  F,  1,  1,  F,  1,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F  },
@@ -79,15 +80,16 @@ namespace Emulador
 
         public Lexico(string nombreArchivo = "prueba.cpp")
         {
+            charCount = 1;
 
             string nombreArchivoWithoutExt = Path.GetFileNameWithoutExtension(nombreArchivo);   /* Obtenemos el nombre del archivo sin la extensión para poder crear el .log y .asm */
             log = new StreamWriter(nombreArchivoWithoutExt + ".log");
 
             if (Path.GetExtension(nombreArchivo) != ".cpp")
             {
-                throw new Error("El archivo debe ser de extensión .cpp",log);
+                throw new Error("El archivo debe ser de extensión .cpp", log);
             }
-            
+
             if (File.Exists(nombreArchivo))
             {
                 asm = new StreamWriter(nombreArchivoWithoutExt + ".asm");
@@ -101,7 +103,7 @@ namespace Emulador
             }
             else
             {
-                throw new Error ("El archivo " + Path.GetExtension(nombreArchivo) + " no existe", log);
+                throw new Error("El archivo " + Path.GetExtension(nombreArchivo) + " no existe", log);
             }
         }
         public void Dispose()
@@ -252,7 +254,7 @@ namespace Emulador
                 case 25:
                 case 26: Clasificacion = Tipos.OperadorRelacional; break;
                 case 23: Clasificacion = Tipos.Asignacion; break;
-                case 27: Clasificacion = Tipos.Cadena; break;
+                case 27: Clasificacion = Tipos.Cadena; break;
             }
         }
         public void nextToken()
@@ -268,6 +270,7 @@ namespace Emulador
                 if (estado >= 0)
                 {
                     archivo.Read();
+                    charCount++;
                     if (c == '\n')
                     {
                         linea++;
@@ -317,15 +320,31 @@ namespace Emulador
                         case "char":
                         case "int":
                         case "float":
-                            Clasificacion=Tipos.TipoDato;
+                            Clasificacion = Tipos.TipoDato;
                             break;
                         case "if":
                         case "else":
                         case "do":
                         case "while":
                         case "for":
-                            Clasificacion=Tipos.PalabraReservada;
+                            Clasificacion = Tipos.PalabraReservada;
                             break;
+                        case "abs":
+                        case "ceil":
+                        case "pow":
+                        case "sqrt":
+                        case "exp":
+                        case "equal":
+                        case "floor":
+                        case "max":
+                        case "min":
+                        case "log10":
+                        case "log2":
+                        case "random":
+                        case "trunc":
+                        case "round":
+                            Clasificacion = Tipos.FuncionMatematica;
+                        break;    
                     }
                 }
                 //log.WriteLine(getContenido() + " = " + getClasificacion());

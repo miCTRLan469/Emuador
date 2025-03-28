@@ -16,7 +16,7 @@ static void Main(string[] args)
 
   x =(char) ((3 + altura) * 8 - (10 - 4) / 2); // = 61
   x--;
-  x += (altura * 8);
+  x += sqrt(abs(altura * trunc(8.940)));
   x *= 2;
   x /= (y - 6);
   Console.WriteLine(x);

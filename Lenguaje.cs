@@ -34,6 +34,9 @@ NUEVOS REQUERIMIENTOS AUTOMATAS I:
     -------------------------REQUERIMIENTOS TERCER PARCIAL----------------------------
     1) Exception en console.read()
     2) La segunda asignacion del for(incremento) debe de ejecutarse despues del bloque de instrucciones e instruccion
+    3) Programar el metod funcionMatematica()
+    4) Programar el for
+    5) Programar el while
     ---------------------------------------------------------------------------------
     ***********************************************************************************
 */
@@ -431,20 +434,32 @@ namespace Emulador
         while(Condicion);*/
         private void Do(bool ejecuta)
         {
-            match("do");
-            if (Contenido == "{")
+            //match("do");
+            int charTMP = charCount - 2; // Se resta 3 porque se lee el do
+            int lineaTMP = linea;
+            bool ejecutaDo;
+            do
             {
-                BloqueInstrucciones(ejecuta);
-            }
-            else
-            {
-                Instruccion(ejecuta);
-            }
-            match("while");
-            match("(");
-            bool ejecutaDo = Condicion() && ejecuta;
-            match(")");
-            match(";");
+                match("do");
+                if (Contenido == "{")
+                {
+                    BloqueInstrucciones(ejecuta);
+                }
+                else
+                {
+                    Instruccion(ejecuta);
+                }
+                match("while");
+                match("(");
+                ejecutaDo = Condicion() && ejecuta;
+                match(")");
+                match(";");
+                if(ejecutaDo){
+                    charCount = charTMP;
+                    linea = lineaTMP;
+                    break;
+                }
+            } while (ejecutaDo);
         }
         /*For -> for(Asignacion; Condicion; Asignacion) 
         BloqueInstrucciones | Intruccion*/
@@ -620,7 +635,7 @@ namespace Emulador
             }
         }
         //Factor -> numero | identificador | (Expresion)
-        
+
         private void Factor()
         {
             if (Clasificacion == Tipos.Numero)
@@ -650,6 +665,17 @@ namespace Emulador
 
                 s.Push(v.getValor());
                 match(Tipos.Identificador);
+            }
+            else if (Clasificacion == Tipos.FuncionMatematica)
+            {
+                string nombreFuncion = Contenido;
+                match(Tipos.FuncionMatematica);
+                match("(");
+                Expresion();
+                match(")");
+                float resultado = s.Pop();
+                float mathResult = funcionMatematica(resultado, nombreFuncion);
+                s.Push(mathResult);
             }
             else
             {
@@ -684,13 +710,24 @@ namespace Emulador
                             break;
                         case Variable.TipoDato.Char:
                             valor %= 256;
-                            break;    
+                            break;
                     }
                     s.Push(valor); // Regresar el valor casteado al stack
                     maxTipo = tipoCasteo; // Actualizar el tipo máximo
                 }
                 match(")");
             }
+        }
+        private float funcionMatematica(float valor, string nombre)
+        {
+            float resultado;
+            switch (nombre)
+            {
+                case "abs": resultado = Math.Abs(valor); break;
+                case "pow": resultado = (float)Math.Pow(valor, 2); break;
+            }
+
+            return valor;
         }
     }
 }
