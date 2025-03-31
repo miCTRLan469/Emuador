@@ -14,7 +14,7 @@ namespace Emulador
 {
     public class Lexico : Token, IDisposable
     {
-        public StreamReader archivo;
+        protected StreamReader archivo;
         public StreamWriter log;
         public StreamWriter asm;
         public static int linea = 1;
@@ -334,14 +334,14 @@ namespace Emulador
                         case "pow":
                         case "sqrt":
                         case "exp":
-                        case "equal":
+                        case "equals":
                         case "floor":
                         case "max":
                         case "min":
                         case "log10":
                         case "log2":
                         case "random":
-                        case "trunc":
+                        case "truncate":
                         case "round":
                             Clasificacion = Tipos.FuncionMatematica;
                         break;    

@@ -12,3 +12,4 @@ C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\refint\Emuador
 C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.pdb
 C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.genruntimeconfig.cache
 C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\ref\Emuador.dll
+C:\Users\Esteban\Documents\ITQ\AUTOMATAS\Emuador\obj\Debug\net8.0\Emuador.sourcelink.json

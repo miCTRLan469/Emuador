@@ -32,11 +32,12 @@ NUEVOS REQUERIMIENTOS AUTOMATAS I:
     5) Implementar el casteo en el stack
 
     -------------------------REQUERIMIENTOS TERCER PARCIAL----------------------------
-    1) Exception en console.read()
-    2) La segunda asignacion del for(incremento) debe de ejecutarse despues del bloque de instrucciones e instruccion
-    3) Programar el metod funcionMatematica()
-    4) Programar el for
-    5) Programar el while
+    REQUERIMIENTOS
+    1. Excepción en el Console.Read().
+    2. Programar MathFunction método.
+    3. Programar el for. La segunda asignación del for (incremento) 
+       debe de ejecutarse después del bloque de instrucciones o instrucción.
+    4. Programar el while.
     ---------------------------------------------------------------------------------
     ***********************************************************************************
 */
@@ -415,27 +416,37 @@ namespace Emulador
             }
         }
         //While -> while(Condicion) bloqueInstrucciones | instruccion
+
         private void While(bool ejecuta)
         {
-            match("while");
-            match("(");
-            bool ejecutaWhile = Condicion() && ejecuta;
-            match(")");
-            if (Contenido == "{")
+            bool ejecutaWhile;
+            int charTMP = charCount - 3; // Se resta 3 porque se lee el do
+            int lineaTMP = linea;
+            Console.WriteLine("CharTMP: " + charTMP + " LineaTMP: " + lineaTMP + " contenido: " + Contenido);
+
+            while ()
             {
-                BloqueInstrucciones(ejecutaWhile);
+                match("while");
+                match("(");
+                ejecutaWhile = Condicion() && ejecuta;
+                match(")");
+                if (Contenido == "{")
+                {
+                    BloqueInstrucciones(ejecutaWhile);
+                }
+                else
+                {
+                    Instruccion(ejecutaWhile);
+                }
             }
-            else
-            {
-                Instruccion(ejecutaWhile);
-            }
+
         }
         /*Do -> do bloqueInstrucciones | intruccion 
         while(Condicion);*/
         private void Do(bool ejecuta)
         {
             //match("do");
-            int charTMP = charCount - 2; // Se resta 3 porque se lee el do
+            int charTMP = charCount - 3; // Se resta 3 porque se lee el do
             int lineaTMP = linea;
             bool ejecutaDo;
             do
@@ -454,10 +465,14 @@ namespace Emulador
                 ejecutaDo = Condicion() && ejecuta;
                 match(")");
                 match(";");
-                if(ejecutaDo){
+                if (ejecutaDo)
+                {
+                    //Seek
+                    archivo.DiscardBufferedData();
+                    archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin);
                     charCount = charTMP;
                     linea = lineaTMP;
-                    break;
+                    nextToken();
                 }
             } while (ejecutaDo);
         }
@@ -718,16 +733,31 @@ namespace Emulador
                 match(")");
             }
         }
+        float resultado;
+        Random rndNum = new Random();
         private float funcionMatematica(float valor, string nombre)
         {
-            float resultado;
+
             switch (nombre)
             {
                 case "abs": resultado = Math.Abs(valor); break;
                 case "pow": resultado = (float)Math.Pow(valor, 2); break;
+                case "sqrt": resultado = (float)Math.Sqrt(valor); break;
+                case "ceil": resultado = (float)Math.Ceiling(valor); break; // redondea hacia arriba
+                case "floor": resultado = (float)Math.Floor(valor); break; // redondea hacia abajo
+                case "exp": resultado = (float)Math.Exp(valor); break;
+                //case "equals": resultado = (float)Math.Equals(valor); break;
+                //case "max": resultado = (float)Math.Max(valor); break;
+                //case "min": resultado = (float)Math.Min(valor); break;
+                case "log10": resultado = (float)Math.Log10(valor); break;
+                case "log2": resultado = (float)Math.Log2(valor); break;
+                case "random": resultado = rndNum.Next((int)valor); break;
+                case "truncate": resultado = (float)Math.Truncate(valor); break;
+                case "round": resultado = (float)Math.Round(valor); break;
+                default: throw new Error("Semantico: La funcion " + nombre + " no existe", log, linea, columna);
             }
 
-            return valor;
+            return resultado;
         }
     }
 }

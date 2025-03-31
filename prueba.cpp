@@ -5,61 +5,22 @@ using System.Threading.Tasks;
 
 static void Main(string[] args)
 {
-  int altura, i, j;
-  char x = 0, y = 10, z = 2;
-  char c;
+    int filas;
 
-  // c = (100+200)
-  c = (char)(100 + 200);
-  Console.WriteLine("Valor de altura = ");
-  altura = Console.ReadLine();
+    Console.Write("Ingrese el número de filas del triángulo: ");
+    filas = 5;
 
-  x =(char) ((3 + altura) * 8 - (10 - 4) / 2); // = 61
-  x--;
-  x += sqrt(abs(altura * trunc(8.940)));
-  x *= 2;
-  x /= (y - 6);
-  Console.WriteLine(x);
-  x = x + 5; // x = 55
+    int i = 1;
 
-  while(x<60){
-    Console.WriteLine("x = "+x);
-  }
-/*
-  for (i = 1; i <= altura; i++)
-  {
-    for (j = 1; j <= i; j++)
+    while (i <= filas)
     {
-      if (j % 2 == 0)
-        Console.Write("*");
-      else
-        Console.Write("-");
+        int j = 1;
+        while (j <= i)
+        {
+            Console.Write("*");
+            j++;
+        }
+        Console.WriteLine("");
+        i++;
     }
-    Console.WriteLine("");
-  }
-  i = 0;
-  do
-  {
-    Console.Write("-");
-    i++;
-  } while (i < altura * 2);
-  Console.WriteLine("");
-  for (i = 1; i <= altura; i++)
-  {
-    j = 1;
-    while (j <= i)
-    {
-      Console.Write(j);
-      j++;
-    }
-    Console.WriteLine("");
-  }
-  i = 0;
-  do
-  {
-    Console.Write("-");
-    i++;
-  } while (i < altura * 2);
-  Console.WriteLine("");
-  */
 }

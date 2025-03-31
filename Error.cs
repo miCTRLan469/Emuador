@@ -13,9 +13,9 @@ namespace Emulador
         {
             log.WriteLine("Error: " + message);
         }
-        public Error(string message, StreamWriter log, int linea, int columna) : base(message + "en la linea [" + linea + "] en la columna [" + columna + "]")
+        public Error(string message, StreamWriter log, int linea, int columna) : base(message + " en la linea [" + linea + "] en la columna [" + columna + "]")
         {
-            log.WriteLine("Error: " + message + "en la linea [" + linea + "] en la columna [" + columna + "]");
+            log.WriteLine("Error: " + message + " en la linea [" + linea + "] en la columna [" + columna + "]");
         }
     }
 }
