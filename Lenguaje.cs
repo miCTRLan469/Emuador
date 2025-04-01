@@ -33,8 +33,8 @@ NUEVOS REQUERIMIENTOS AUTOMATAS I:
 
     -------------------------REQUERIMIENTOS TERCER PARCIAL----------------------------
     REQUERIMIENTOS
-    1. Excepción en el Console.Read().
-    2. Programar MathFunction método.
+    1. Excepción en el Console.Read(). [OK]
+    2. Programar MathFunction método. [OK]
     3. Programar el for. La segunda asignación del for (incremento) 
        debe de ejecutarse después del bloque de instrucciones o instrucción.
     4. Programar el while.
@@ -303,7 +303,15 @@ namespace Emulador
                     {
                         match("Read");
                         match("(");
-                        Console.Read();
+                        int readInput = Console.Read();
+                        if(readInput < 48 || readInput > 57)
+                        {
+                            throw new Error("Entrada invalida: Solo se permiten numeros entre 0 y 9.");
+                        }
+                        else{
+                        s.Push(readInput);
+                        v?.setValor(readInput, maxTipo);
+                        }
                     }
                     else
                     {
@@ -416,16 +424,17 @@ namespace Emulador
             }
         }
         //While -> while(Condicion) bloqueInstrucciones | instruccion
-
+        //bool ejecutaWhile;
+        bool ejecutaWhile;
         private void While(bool ejecuta)
         {
-            bool ejecutaWhile;
-            int charTMP = charCount - 3; // Se resta 3 porque se lee el do
+            int charTMP = charCount - 3; // Se resta 3 porque se lee el while
             int lineaTMP = linea;
             Console.WriteLine("CharTMP: " + charTMP + " LineaTMP: " + lineaTMP + " contenido: " + Contenido);
 
-            while ()
+            while (ejecutaWhile)
             {
+                Console.WriteLine("Ciclo while");
                 match("while");
                 match("(");
                 ejecutaWhile = Condicion() && ejecuta;
@@ -437,6 +446,15 @@ namespace Emulador
                 else
                 {
                     Instruccion(ejecutaWhile);
+                }
+                if (ejecutaWhile)
+                {
+                    //Seek
+                    archivo.DiscardBufferedData();
+                    archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin);
+                    charCount = charTMP;
+                    linea = lineaTMP;
+                    nextToken();
                 }
             }
 
@@ -746,9 +764,24 @@ namespace Emulador
                 case "ceil": resultado = (float)Math.Ceiling(valor); break; // redondea hacia arriba
                 case "floor": resultado = (float)Math.Floor(valor); break; // redondea hacia abajo
                 case "exp": resultado = (float)Math.Exp(valor); break;
-                //case "equals": resultado = (float)Math.Equals(valor); break;
-                //case "max": resultado = (float)Math.Max(valor); break;
-                //case "min": resultado = (float)Math.Min(valor); break;
+                // 0 - 255
+                // 256 - 65535
+                case "max":
+                    if (valor > 0 && valor <= 255)
+                    {
+                        resultado = Math.Max(valor, 255);
+                        return resultado;
+                    }
+                    else if (valor >= 256 &&valor <= 65535)
+                    {
+                        resultado = Math.Max(valor, 65535);
+                        return resultado;
+                    }
+                    else
+                    {
+                        return resultado;
+                    }
+
                 case "log10": resultado = (float)Math.Log10(valor); break;
                 case "log2": resultado = (float)Math.Log2(valor); break;
                 case "random": resultado = rndNum.Next((int)valor); break;

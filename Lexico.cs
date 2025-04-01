@@ -334,10 +334,8 @@ namespace Emulador
                         case "pow":
                         case "sqrt":
                         case "exp":
-                        case "equals":
                         case "floor":
                         case "max":
-                        case "min":
                         case "log10":
                         case "log2":
                         case "random":
