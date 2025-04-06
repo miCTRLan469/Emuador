@@ -304,14 +304,14 @@ namespace Emulador
                         match("Read");
                         match("(");
                         int readInput = Console.Read();
-                        if(readInput < 48 || readInput > 57)
+                        if (readInput < 48 || readInput > 57)
                         {
                             throw new Error("Entrada invalida: Solo se permiten numeros entre 0 y 9.");
                         }
-                        else{
+
                         s.Push(readInput);
                         v?.setValor(readInput, maxTipo);
-                        }
+
                     }
                     else
                     {
@@ -425,39 +425,33 @@ namespace Emulador
         }
         //While -> while(Condicion) bloqueInstrucciones | instruccion
         //bool ejecutaWhile;
-        bool ejecutaWhile;
         private void While(bool ejecuta)
         {
-            int charTMP = charCount - 3; // Se resta 3 porque se lee el while
-            int lineaTMP = linea;
-            Console.WriteLine("CharTMP: " + charTMP + " LineaTMP: " + lineaTMP + " contenido: " + Contenido);
+            bool ejecutaWhile;
+            int charTMP = charCount - 6; //posicion de inicio del while
+            int lineaTMP = linea; // linea de inicio del while
 
-            while (ejecutaWhile)
+            match("while");
+            match("(");
+            ejecutaWhile = Condicion() && ejecuta;
+            match(")");
+            if (Contenido == "{")
             {
-                Console.WriteLine("Ciclo while");
-                match("while");
-                match("(");
-                ejecutaWhile = Condicion() && ejecuta;
-                match(")");
-                if (Contenido == "{")
-                {
-                    BloqueInstrucciones(ejecutaWhile);
-                }
-                else
-                {
-                    Instruccion(ejecutaWhile);
-                }
-                if (ejecutaWhile)
-                {
-                    //Seek
-                    archivo.DiscardBufferedData();
-                    archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin);
-                    charCount = charTMP;
-                    linea = lineaTMP;
-                    nextToken();
-                }
+                BloqueInstrucciones(ejecutaWhile);
             }
-
+            else
+            {
+                Instruccion(ejecutaWhile);
+            }
+            //Seek
+            if (ejecutaWhile)
+            {
+                archivo.DiscardBufferedData(); // limpia el buffer
+                archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin); // lo regresa a la posicion de inicio del while
+                charCount = charTMP;
+                linea = lineaTMP;
+                nextToken();
+            }
         }
         /*Do -> do bloqueInstrucciones | intruccion 
         while(Condicion);*/
@@ -498,11 +492,14 @@ namespace Emulador
         BloqueInstrucciones | Intruccion*/
         private void For(bool ejecuta)
         {
+            int charTMP = charCount - 4; // Se resta 4 porque se lee el for
+            int lineaTMP = linea;
+            bool ejecutaFor;
             match("for");
             match("(");
             Asignacion();
             match(";");
-            bool ejecutaFor = Condicion() && ejecuta;
+            ejecutaFor = Condicion() && ejecuta;
             match(";");
             Asignacion();
             match(")");
@@ -513,6 +510,14 @@ namespace Emulador
             else
             {
                 Instruccion(ejecutaFor);
+            }
+            if (ejecutaFor)
+            {
+            archivo.DiscardBufferedData();
+            archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin);
+            charCount = charTMP;
+            linea = lineaTMP;
+            nextToken();
             }
         }
         //Console -> Console.(WriteLine|Write) (cadena? concatenaciones?);
@@ -682,6 +687,14 @@ namespace Emulador
                 s.Push(float.Parse(Contenido));
                 match(Tipos.Numero);
             }
+            else if (Contenido == "-")
+            {
+                match("-");
+                Factor();
+                float valor = s.Pop();
+                s.Push(-valor);
+
+            }
             else if (Clasificacion == Tipos.Identificador)
             {
                 Variable? v = l.Find(variable => variable.getNombre() == Contenido);
@@ -772,7 +785,7 @@ namespace Emulador
                         resultado = Math.Max(valor, 255);
                         return resultado;
                     }
-                    else if (valor >= 256 &&valor <= 65535)
+                    else if (valor >= 256 && valor <= 65535)
                     {
                         resultado = Math.Max(valor, 65535);
                         return resultado;
@@ -784,7 +797,7 @@ namespace Emulador
 
                 case "log10": resultado = (float)Math.Log10(valor); break;
                 case "log2": resultado = (float)Math.Log2(valor); break;
-                case "random": resultado = rndNum.Next((int)valor); break;
+                case "rand": resultado = rndNum.Next((int)valor); break;
                 case "truncate": resultado = (float)Math.Truncate(valor); break;
                 case "round": resultado = (float)Math.Round(valor); break;
                 default: throw new Error("Semantico: La funcion " + nombre + " no existe", log, linea, columna);

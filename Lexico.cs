@@ -338,7 +338,7 @@ namespace Emulador
                         case "max":
                         case "log10":
                         case "log2":
-                        case "random":
+                        case "rand":
                         case "truncate":
                         case "round":
                             Clasificacion = Tipos.FuncionMatematica;
