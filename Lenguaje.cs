@@ -492,32 +492,41 @@ namespace Emulador
         BloqueInstrucciones | Intruccion*/
         private void For(bool ejecuta)
         {
+            bool bandera = true;
             int charTMP = charCount - 4; // Se resta 4 porque se lee el for
             int lineaTMP = linea;
             bool ejecutaFor;
             match("for");
             match("(");
             Asignacion();
+            int inicioCondicion = charCount;
+            int lineaCondicion = linea;
             match(";");
-            ejecutaFor = Condicion() && ejecuta;
-            match(";");
-            Asignacion();
-            match(")");
-            if (Contenido == "{")
+            while (bandera)
             {
-                BloqueInstrucciones(ejecutaFor);
-            }
-            else
-            {
-                Instruccion(ejecutaFor);
-            }
-            if (ejecutaFor)
-            {
-            archivo.DiscardBufferedData();
-            archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin);
-            charCount = charTMP;
-            linea = lineaTMP;
-            nextToken();
+                ejecutaFor = Condicion() && ejecuta;
+                int inicioIncremento = charCount;
+                int lineaIncremento = linea;
+                match(";");
+                Asignacion();
+                match(")");
+                if (Contenido == "{")
+                {
+                    BloqueInstrucciones(ejecutaFor);
+                }
+                else
+                {
+                    Instruccion(ejecutaFor);
+                }
+                archivo.DiscardBufferedData();
+                archivo.BaseStream.Seek(inicioCondicion, SeekOrigin.Begin);
+                charCount = inicioCondicion;
+                linea = lineaCondicion;
+                nextToken();
+                if (ejecutaFor==false)
+                {
+                    bandera = false;
+                }   
             }
         }
         //Console -> Console.(WriteLine|Write) (cadena? concatenaciones?);
