@@ -13,7 +13,7 @@ static void Main(string[] args)
     for(l = 0; l < 5; l++) {
         random = rand(100);
         m = l + 1;
-        Console.WriteLine(m + " Random = " + random + "..." + l);
+        Console.WriteLine(m + " Random = " + random);
         }
         
         
@@ -28,7 +28,7 @@ static void Main(string[] args)
     c = (char)(100 + 200); // 44
     
     Console.Write("Valor de altura = ");
-    altura = Console.ReadLine();
+    altura = Console.Read();
     
     // Si altura = 5, entonces
     x = (char)(((3 + altura) * 8 - (10 - 4) / 2)); // 61

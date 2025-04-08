@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Emuador")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bedaa857a943bea1a68e36e39fc4e220726d7939")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c0355c2812467849d56c55f62d1826a88c16a374")]
 [assembly: System.Reflection.AssemblyProductAttribute("Emuador")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Emuador")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -36,8 +36,8 @@ NUEVOS REQUERIMIENTOS AUTOMATAS I:
     1. Excepción en el Console.Read(). [OK]
     2. Programar MathFunction método. [OK]
     3. Programar el for. La segunda asignación del for (incremento) 
-       debe de ejecutarse después del bloque de instrucciones o instrucción.
-    4. Programar el while.
+       debe de ejecutarse después del bloque de instrucciones o instrucción.[OK]
+    4. Programar el while.[OK]
     ---------------------------------------------------------------------------------
     ***********************************************************************************
 */
@@ -166,7 +166,13 @@ namespace Emulador
                     {
                         match("Read");
                         int r = Console.Read();
+                        if (r < 48 || r > 57)
+                        {
+                            throw new Error("Entrada invalida: Solo se permiten numeros entre 0 y 9.");
+                        }
+                        r -= 48;
                         v.setValor(r); // Asignamos el último valor leído a la última variable detectada
+                        Console.ReadLine();
                     }
                     else
                     {
@@ -311,7 +317,7 @@ namespace Emulador
                         readInput -= 48;
                         s.Push(readInput);
                         v?.setValor(readInput, maxTipo);
-
+                        Console.ReadLine();
                     }
                     else
                     {
@@ -521,7 +527,7 @@ namespace Emulador
                 {
                     Instruccion(ejecutaFor);
                 }
-                //SALTO A SEGUNDA CONDICION
+                //SALTO A SEGUNDA ASIGNACION
                 archivo.DiscardBufferedData();
                 archivo.BaseStream.Seek(inicioIncremento, SeekOrigin.Begin);
                 charCount = inicioIncremento;
