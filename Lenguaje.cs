@@ -308,7 +308,7 @@ namespace Emulador
                         {
                             throw new Error("Entrada invalida: Solo se permiten numeros entre 0 y 9.");
                         }
-
+                        readInput -= 48;
                         s.Push(readInput);
                         v?.setValor(readInput, maxTipo);
 
@@ -508,7 +508,10 @@ namespace Emulador
                 int inicioIncremento = charCount;
                 int lineaIncremento = linea;
                 match(";");
-                Asignacion();
+                while (Contenido != ")"){
+                    nextToken();
+                }
+                //Asignacion();
                 match(")");
                 if (Contenido == "{")
                 {
@@ -518,15 +521,38 @@ namespace Emulador
                 {
                     Instruccion(ejecutaFor);
                 }
+                //SALTO A SEGUNDA CONDICION
+                archivo.DiscardBufferedData();
+                archivo.BaseStream.Seek(inicioIncremento, SeekOrigin.Begin);
+                charCount = inicioIncremento;
+                linea = lineaIncremento;
+                nextToken();
+                Asignacion();
+
+                //SALTO A EVALUAR CONDICION
                 archivo.DiscardBufferedData();
                 archivo.BaseStream.Seek(inicioCondicion, SeekOrigin.Begin);
                 charCount = inicioCondicion;
                 linea = lineaCondicion;
                 nextToken();
-                if (ejecutaFor==false)
+
+                if (ejecutaFor == false)
                 {
                     bandera = false;
-                }   
+                }
+            }
+
+            while (Contenido != "{")
+            {
+                nextToken();
+            }
+            if (Contenido == "{")
+            {
+                BloqueInstrucciones(false);
+            }
+            else
+            {
+                Instruccion(false);
             }
         }
         //Console -> Console.(WriteLine|Write) (cadena? concatenaciones?);
