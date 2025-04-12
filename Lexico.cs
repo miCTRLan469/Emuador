@@ -10,6 +10,11 @@ using System.Data.Common;
 using System.IO.Compression;
 using Microsoft.VisualBasic;
 
+/*
+Clase para manejar el lenguaje.
+Aqui es en donde se analiza el codigo que se encuentra en el archivo "prueba.cpp"
+para posteriormente compilarlo.
+*/
 namespace Emulador
 {
     public class Lexico : Token, IDisposable
@@ -62,27 +67,12 @@ namespace Emulador
                 { 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 37, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36  },
                 { 36, 36, 36, 36, 36, 36, 35, 36, 36, 36, 36, 36, 37, 36, 36, 36, 36, 36, 36, 36, 36, 36,  0, 36, 36, 36  }
             };
-        /*public Lexico()
-        {
-            log = new StreamWriter("prueba.log");
-            asm = new StreamWriter("prueba.asm");
-            log.AutoFlush = true;
-            asm.AutoFlush = true;
-            if (File.Exists("prueba.cpp"))
-            {
-                archivo = new StreamReader("prueba.cpp");
-            }
-            else
-            {
-                throw new Error("El archivo prueba.cpp no existe", log);
-            }
-        }*/
 
-        public Lexico(string nombreArchivo = "prueba.cpp")
+        public Lexico(string nombreArchivo = "prueba.cpp") // Constructor con parametro por defecto llamado "prueba.cpp"
         {
             charCount = 1;
-
-            string nombreArchivoWithoutExt = Path.GetFileNameWithoutExtension(nombreArchivo);   /* Obtenemos el nombre del archivo sin la extensión para poder crear el .log y .asm */
+            //Obtenemos el nombre del archivo sin la extensión para poder crear el .log y .asm 
+            string nombreArchivoWithoutExt = Path.GetFileNameWithoutExtension(nombreArchivo);
             log = new StreamWriter(nombreArchivoWithoutExt + ".log");
 
             if (Path.GetExtension(nombreArchivo) != ".cpp")
@@ -106,16 +96,15 @@ namespace Emulador
                 throw new Error("El archivo " + Path.GetExtension(nombreArchivo) + " no existe", log);
             }
         }
-        public void Dispose()
+        public void Dispose() // Destructor de la clase
         {
             archivo.Close();
             log.Close();
             asm.Close();
         }
 
-        private int Columna(char c)
+        private int Columna(char c) // Metodo para obtener la columna de TRAND
         {
-            //int columna;
             if (c == '\n')
             {
                 return 23;
@@ -225,7 +214,7 @@ namespace Emulador
                 return 25;
             }
         }
-        private void Clasifica(int estado)
+        private void Clasifica(int estado) // Metodo para clasificar los tokens de acuerdo a su estado en TRAND
         {
             switch (estado)
             {
@@ -257,7 +246,7 @@ namespace Emulador
                 case 27: Clasificacion = Tipos.Cadena; break;
             }
         }
-        public void nextToken()
+        public void nextToken() // Metodo para obtener el siguiente token
         {
             char c;
             string buffer = "";
@@ -271,7 +260,7 @@ namespace Emulador
                 {
                     archivo.Read();
                     charCount++;
-                    if (c == '\n')
+                    if (c == '\n') // Contador de lineas
                     {
                         linea++;
                         columna = 1;
@@ -290,7 +279,7 @@ namespace Emulador
                     }
                 }
             }
-            if (estado == E)
+            if (estado == E) // Comprobacion de errores lexicos segun el estado E del TRAND
             {
                 if (Clasificacion == Tipos.Cadena)
                 {
@@ -309,9 +298,8 @@ namespace Emulador
                     throw new Error("léxico, se espera fin de comentario", log, linea, columna);
                 }
             }
-            //setContenido(buffer);
             Contenido = buffer;
-            if (!finArchivo())
+            if (!finArchivo()) // Si no se llego al final del archivo
             {
                 if (Clasificacion == Tipos.Identificador)
                 {
@@ -345,10 +333,9 @@ namespace Emulador
                         break;    
                     }
                 }
-                //log.WriteLine(getContenido() + " = " + getClasificacion());
             }
         }
-        public bool finArchivo()
+        public bool finArchivo() // Metodo para saber si se llego al final del archivo
         {
             return archivo.EndOfStream;
         }

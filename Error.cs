@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+/* 
+Clase para manejar los errores. 
+Muestra el mensaje de error en la consola y en el log ademas de mostrar la linea y la columna.
+*/
 
 namespace Emulador
 {
@@ -13,9 +17,9 @@ namespace Emulador
         {
             log.WriteLine("Error: " + message);
         }
-        public Error(string message, StreamWriter log, int linea, int columna) : base(message + " en la linea [" + linea + "] en la columna [" + columna + "]")
+        public Error(string message, StreamWriter log, int linea, int columna) : base(message + " en [" + linea + "," + columna + "]")
         {
-            log.WriteLine("Error: " + message + " en la linea [" + linea + "] en la columna [" + columna + "]");
+            log.WriteLine("Error: " + message + " en[" + linea + "," + columna + "]");
         }
     }
 }

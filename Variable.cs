@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+/*
+Clase para manejar las variables.
+*/
+
 namespace Emulador
 {
     public class Variable

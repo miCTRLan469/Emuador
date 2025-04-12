@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+/*
+Clase para manejar los tokens.
+*/
+
 namespace Emulador
 {
     public class Token
@@ -23,14 +27,6 @@ namespace Emulador
             contenido = "";
             clasificacion = Tipos.Identificador;
         }
-        /*public void setContenido(string contenido)
-        {
-            this.contenido = contenido;
-        }
-        public void setClasificacion(Tipos clasificacion)
-        {
-            this.clasificacion = clasificacion;
-        }*/
         public string Contenido
         {
             get => contenido;

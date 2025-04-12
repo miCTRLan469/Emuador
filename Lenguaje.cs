@@ -1,45 +1,7 @@
 /*
-REQUERIMIENTOS AUTOMATAS I:
-    1) Indicar en el error Léxico o sintáctico, el número de línea y caracter [DONE]
-    2) En el log colocar el nombre del archivo a compilar, la fecha y la hora [DONE]
-    3)  Agregar el resto de asignaciones [DONE]
-            Asignacion -> 
-            Id = Expresion
-            Id++
-            Id--
-            Id IncrementoTermino Expresion
-            Id IncrementoFactor Expresion
-            Id = Console.Read()
-            Id = Console.ReadLine()
-    4) Emular el Console.Write() & Console.WriteLine() [DONE] 
-    5) Emular el Console.Read() & Console.ReadLine() [DONE]
-
-NUEVOS REQUERIMIENTOS AUTOMATAS I:
-    1) Concatenación [DONE]
-    2) Inicializar una variable desde la declaración [DONE]
-    3) Evaluar las expresiones matemáticas [DONE]
-    4) Levantar una excepción si en el Console.(Read | ReadLine) no ingresan números [DONE]
-    5) Modificar la variable con el resto de operadores (Incremento de factor y termino) [DONE]
-    6) Implementar el else [DONE]
-
-
-
-    ***********************REQUERIMIENTOS AUTOMATAS II:********************************
-    1) Implementar set y get para la clase token (listo)
-    2) Implementar parametros por default en el constructor del archivo lexico (listo)
-    3) Implementar linea y columna en los errores semanticos[Listo]
-    4) Implementar maxTipo en la asignacion, es decir, cuando se haga v.setValor(r)
-    5) Implementar el casteo en el stack
-
-    -------------------------REQUERIMIENTOS TERCER PARCIAL----------------------------
-    REQUERIMIENTOS
-    1. Excepción en el Console.Read(). [OK]
-    2. Programar MathFunction método. [OK]
-    3. Programar el for. La segunda asignación del for (incremento) 
-       debe de ejecutarse después del bloque de instrucciones o instrucción.[OK]
-    4. Programar el while.[OK]
-    ---------------------------------------------------------------------------------
-    ***********************************************************************************
+Clase para manejar el lenguaje.
+Aqui es en donde se analiza el codigo que se encuentra en el archivo "prueba.cpp"
+para posteriormente compilarlo.
 */
 
 using System;
@@ -56,14 +18,14 @@ namespace Emulador
         Stack<float> s;
         List<Variable> l;
         Variable.TipoDato maxTipo;
-        public Lenguaje() : base()
+        public Lenguaje() : base() // Constructor
         {
             s = new Stack<float>();
             l = new List<Variable>();
             maxTipo = Variable.TipoDato.Char;
             log.WriteLine("Constructor lenguaje");
         }
-        public Lenguaje(string nombre) : base(nombre)
+        public Lenguaje(string nombre) : base(nombre) // Constructor con parametros 
         {
             s = new Stack<float>();
             l = new List<Variable>();
@@ -71,7 +33,7 @@ namespace Emulador
             log.WriteLine("Constructor lenguaje");
         }
 
-        private void displayStack()
+        private void displayStack() // Mostrar el contenido del stack
         {
             Console.WriteLine("Contenido del stack: ");
             foreach (float elemento in s)
@@ -80,7 +42,7 @@ namespace Emulador
             }
         }
 
-        private void displayLista()
+        private void displayLista() // Mostrar el contenido de la lista
         {
             log.WriteLine("Lista de variables: ");
             foreach (Variable elemento in l)
@@ -90,7 +52,7 @@ namespace Emulador
         }
 
         //Programa  -> Librerias? Variables? Main
-        public void Programa()
+        public void Programa() // Metodo principal
         {
             if (Contenido == "using")
             {
@@ -105,7 +67,7 @@ namespace Emulador
         }
         //Librerias -> using ListaLibrerias; Librerias?
 
-        private void Librerias()
+        private void Librerias() // Metodo para manejar las librerias
         {
             match("using");
             ListaLibrerias();
@@ -117,7 +79,7 @@ namespace Emulador
         }
         //Variables -> tipo_dato Lista_identificadores; Variables?
 
-        private void Variables()
+        private void Variables() // Metodo para manejar las variables
         {
             Variable.TipoDato t = Variable.TipoDato.Char;
             switch (Contenido)
@@ -134,7 +96,7 @@ namespace Emulador
             }
         }
         //ListaLibrerias -> identificador (.ListaLibrerias)?
-        private void ListaLibrerias()
+        private void ListaLibrerias() // Metodo para manejar las librerias
         {
             match(Tipos.Identificador);
             if (Contenido == ".")
@@ -144,13 +106,13 @@ namespace Emulador
             }
         }
         //ListaIdentificadores -> identificador (= Expresion)? (,ListaIdentificadores)?
-        private void ListaIdentificadores(Variable.TipoDato t)
+        private void ListaIdentificadores(Variable.TipoDato t) // Metodo para manejar las variables
         {
             if (l.Find(variable => variable.getNombre() == Contenido) != null)
             {
                 throw new Error($"La variable {Contenido} ya existe", log, linea, columna);
             }
-            //l.Add(new Variable(t, getContenido()));
+
             Variable v = new Variable(t, Contenido);
             l.Add(v);
 
@@ -171,7 +133,7 @@ namespace Emulador
                             throw new Error("Entrada invalida: Solo se permiten numeros entre 0 y 9.");
                         }
                         r -= 48;
-                        v.setValor(r); // Asignamos el último valor leído a la última variable detectada
+                        v.setValor(r);
                         Console.ReadLine();
                     }
                     else
@@ -192,7 +154,6 @@ namespace Emulador
                 }
                 else
                 {
-                    // Como no se ingresó un número desde el Console, entonces viene de una expresión matemática
                     Expresion();
                     float resultado = s.Pop();
                     l.Last().setValor(resultado);
@@ -205,7 +166,7 @@ namespace Emulador
             }
         }
         //BloqueInstrucciones -> { listaIntrucciones? }
-        private void BloqueInstrucciones(bool ejecuta)
+        private void BloqueInstrucciones(bool ejecuta) // Metodo para manejar las instrucciones
         {
             match("{");
             if (Contenido != "}")
@@ -218,7 +179,7 @@ namespace Emulador
             }
         }
         //ListaInstrucciones -> Instruccion ListaInstrucciones?
-        private void ListaInstrucciones(bool ejecuta)
+        private void ListaInstrucciones(bool ejecuta) // Metodo para manejar las instrucciones
         {
             Instruccion(ejecuta);
             if (Contenido != "}")
@@ -232,7 +193,7 @@ namespace Emulador
         }
 
         //Instruccion -> console | If | While | do | For | Variables | Asignación
-        private void Instruccion(bool ejecuta)
+        private void Instruccion(bool ejecuta) // Metodo para manejar las instrucciones
         {
             if (Contenido == "Console")
             {
@@ -264,18 +225,7 @@ namespace Emulador
                 match(";");
             }
         }
-        //Asignacion -> Identificador = Expresion; (DONE)
-        /*
-        Id++ (DONE)
-        Id-- (DONE)
-        Id IncrementoTermino Expresion (DONE)
-        Id IncrementoFactor Expresion (DONE)
-        Id = Console.Read() (DONE)
-        Id = Console.ReadLine() (DONE)
-        */
-
-        //4) Implementar maxTipo en la asignacion, es decir, cuando se haga v.setValor(r)
-        private void Asignacion()
+        private void Asignacion() // Metodo para manejar las asignaciones
         {
             maxTipo = Variable.TipoDato.Char;
             float r;
@@ -284,7 +234,6 @@ namespace Emulador
             {
                 throw new Error("Sintaxis: La variable " + Contenido + " no está definida", log, linea, columna);
             }
-            //Console.Write(getContenido() + " = ");
             match(Tipos.Identificador);
             if (Contenido == "++")
             {
@@ -375,16 +324,14 @@ namespace Emulador
                 r = v.getValor() % s.Pop();
                 v.setValor(r);
             }
-            //displayStack();
         }
         /*If -> if (Condicion) bloqueInstrucciones | instruccion
         (else bloqueInstrucciones | instruccion)?*/
-        private void If(bool ejecuta2)
+        private void If(bool ejecuta2) // Metodo para manejar if
         {
             match("if");
             match("(");
             bool ejecuta = Condicion() && ejecuta2;
-            //Console.WriteLine(ejecuta);
             match(")");
             if (Contenido == "{")
             {
@@ -397,7 +344,7 @@ namespace Emulador
             if (Contenido == "else")
             {
                 match("else");
-                bool ejecutarElse = !ejecuta && ejecuta2; // Solo se ejecuta el else si el if no se ejecutó
+                bool ejecutarElse = !ejecuta && ejecuta2;
                 if (Contenido == "{")
                 {
                     BloqueInstrucciones(ejecutarElse);
@@ -409,7 +356,7 @@ namespace Emulador
             }
         }
         //Condicion -> Expresion operadorRelacional Expresion
-        private bool Condicion()
+        private bool Condicion() // Metodo para manejar las condiciones
         {
             maxTipo = Variable.TipoDato.Char;
             Expresion();
@@ -430,13 +377,12 @@ namespace Emulador
             }
         }
         //While -> while(Condicion) bloqueInstrucciones | instruccion
-        //bool ejecutaWhile;
         private void While(bool ejecuta)
         {
             bool ejecutaWhile;
             int charTMP = charCount - 6; //posicion de inicio del while
             int lineaTMP = linea; // linea de inicio del while
-
+        
             match("while");
             match("(");
             ejecutaWhile = Condicion() && ejecuta;
@@ -449,11 +395,11 @@ namespace Emulador
             {
                 Instruccion(ejecutaWhile);
             }
-            //Seek
             if (ejecutaWhile)
             {
-                archivo.DiscardBufferedData(); // limpia el buffer
-                archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin); // lo regresa a la posicion de inicio del while
+                // Se limpia el buffer, se regresa a la posicion de inicio del while
+                archivo.DiscardBufferedData();
+                archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin);
                 charCount = charTMP;
                 linea = lineaTMP;
                 nextToken();
@@ -463,7 +409,6 @@ namespace Emulador
         while(Condicion);*/
         private void Do(bool ejecuta)
         {
-            //match("do");
             int charTMP = charCount - 3; // Se resta 3 porque se lee el do
             int lineaTMP = linea;
             bool ejecutaDo;
@@ -485,7 +430,7 @@ namespace Emulador
                 match(";");
                 if (ejecutaDo)
                 {
-                    //Seek
+                    // Se limpia el buffer, se regresa a la posicion de inicio del do
                     archivo.DiscardBufferedData();
                     archivo.BaseStream.Seek(charTMP, SeekOrigin.Begin);
                     charCount = charTMP;
@@ -499,8 +444,6 @@ namespace Emulador
         private void For(bool ejecuta)
         {
             bool bandera = true;
-            int charTMP = charCount - 4; // Se resta 4 porque se lee el for
-            int lineaTMP = linea;
             bool ejecutaFor;
             match("for");
             match("(");
@@ -508,7 +451,7 @@ namespace Emulador
             int inicioCondicion = charCount;
             int lineaCondicion = linea;
             match(";");
-            while (bandera)
+            while (bandera) // Evalua la condicion de ejecutaFor
             {
                 ejecutaFor = Condicion() && ejecuta;
                 int inicioIncremento = charCount;
@@ -517,7 +460,6 @@ namespace Emulador
                 while (Contenido != ")"){
                     nextToken();
                 }
-                //Asignacion();
                 match(")");
                 if (Contenido == "{")
                 {
@@ -548,11 +490,11 @@ namespace Emulador
                 }
             }
 
-            while (Contenido != "{")
+            while (Contenido != "{") // Salta al bloque de instrucciones en la ultima vuelta si ejecutaFor es falso
             {
                 nextToken();
             }
-            if (Contenido == "{")
+            if (Contenido == "{") // Ignora la ultima vuelta del bloque de instrucciones cuando ejecutaFor es falso
             {
                 BloqueInstrucciones(false);
             }
@@ -562,7 +504,7 @@ namespace Emulador
             }
         }
         //Console -> Console.(WriteLine|Write) (cadena? concatenaciones?);
-        private void console(bool ejecuta)
+        private void console(bool ejecuta) // Metodo para manejar console.WriteLine y console.Write
         {
             bool isWriteLine = false;
             match("Console");
@@ -622,7 +564,7 @@ namespace Emulador
             }
         }
         // Concatenaciones -> Identificador|Cadena ( + concatenaciones )?
-        private string Concatenaciones()
+        private string Concatenaciones() // Metodo para manejar las concatenaciones
         {
             string resultado = "";
             if (Clasificacion == Tipos.Identificador)
@@ -651,7 +593,7 @@ namespace Emulador
             return resultado;
         }
         //Main -> static void Main(string[] args) BloqueInstrucciones 
-        private void Main()
+        private void Main() // Metodo principal
         {
             match("static");
             match("void");
@@ -665,13 +607,13 @@ namespace Emulador
             BloqueInstrucciones(true);
         }
         // Expresion -> Termino MasTermino
-        private void Expresion()
+        private void Expresion() // Metodo para manejar las expresiones
         {
             Termino();
             MasTermino();
         }
         //MasTermino -> (OperadorTermino Termino)?
-        private void MasTermino()
+        private void MasTermino() // Metodo para manejar las operaciones
         {
             if (Clasificacion == Tipos.OperadorTermino)
             {
@@ -689,13 +631,13 @@ namespace Emulador
             }
         }
         //Termino -> Factor PorFactor
-        private void Termino()
+        private void Termino() // Metodo para manejar las operaciones
         {
             Factor();
             PorFactor();
         }
         //PorFactor -> (OperadorFactor Factor)?
-        private void PorFactor()
+        private void PorFactor() // Metodo para manejar las operaciones
         {
             if (Clasificacion == Tipos.OperadorFactor)
             {
@@ -715,7 +657,7 @@ namespace Emulador
         }
         //Factor -> numero | identificador | (Expresion)
 
-        private void Factor()
+        private void Factor() // Metodo para manejar las operaciones
         {
             if (Clasificacion == Tipos.Numero)
             {
@@ -807,20 +749,18 @@ namespace Emulador
         }
         float resultado;
         Random rndNum = new Random();
-        private float funcionMatematica(float valor, string nombre)
+        private float funcionMatematica(float valor, string nombre) // Metodo para manejar las funciones matemáticas
         {
 
             switch (nombre)
             {
-                case "abs": resultado = Math.Abs(valor); break;
-                case "pow": resultado = (float)Math.Pow(valor, 2); break;
-                case "sqrt": resultado = (float)Math.Sqrt(valor); break;
+                case "abs": resultado = Math.Abs(valor); break; // valor absoluto
+                case "pow": resultado = (float)Math.Pow(valor, 2); break; // potencia por defecto al cuadrado
+                case "sqrt": resultado = (float)Math.Sqrt(valor); break; // raiz cuadrada
                 case "ceil": resultado = (float)Math.Ceiling(valor); break; // redondea hacia arriba
                 case "floor": resultado = (float)Math.Floor(valor); break; // redondea hacia abajo
-                case "exp": resultado = (float)Math.Exp(valor); break;
-                // 0 - 255
-                // 256 - 65535
-                case "max":
+                case "exp": resultado = (float)Math.Exp(valor); break; // exponencial
+                case "max": // devuelve el mayor de dos argumentos, por defecto 65535 para int y 255 para char
                     if (valor > 0 && valor <= 255)
                     {
                         resultado = Math.Max(valor, 255);
@@ -836,11 +776,11 @@ namespace Emulador
                         return resultado;
                     }
 
-                case "log10": resultado = (float)Math.Log10(valor); break;
-                case "log2": resultado = (float)Math.Log2(valor); break;
-                case "rand": resultado = rndNum.Next((int)valor); break;
-                case "truncate": resultado = (float)Math.Truncate(valor); break;
-                case "round": resultado = (float)Math.Round(valor); break;
+                case "log10": resultado = (float)Math.Log10(valor); break; // logaritmo base 10
+                case "log2": resultado = (float)Math.Log2(valor); break; // logaritmo base 2
+                case "rand": resultado = rndNum.Next((int)valor); break; // genera un numero aleatorio
+                case "truncate": resultado = (float)Math.Truncate(valor); break; // elimina la parte decimal
+                case "round": resultado = (float)Math.Round(valor); break; // redondea al entero mas cercano
                 default: throw new Error("Semantico: La funcion " + nombre + " no existe", log, linea, columna);
             }
 
